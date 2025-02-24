@@ -13,14 +13,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Secure Download
+    - name: Secure Anya Download
       run: |
         echo "::add-mask::$ANYA_URL"
         wget --quiet --output-document=anya "$ANYA_URL"
       env:
         ANYA_URL: ${{ secrets.ANYA_URL }}
 
-    - name: Secure Download1
+    - name: Secure Anyaa Download
       run: |
         echo "::add-mask::$ANYAA_URL"
         wget --quiet --output-document=anyaa "$ANYAA_URL"
@@ -31,7 +31,7 @@ jobs:
       run: |
         if [ -f anya ]; then echo "File anya downloaded successfully"; else echo "File anya not downloaded"; fi
 
-    - name: Check if anya exists
+    - name: Check if anyaa exists
       run: |
         if [ -f anyaa ]; then echo "File anyaa downloaded successfully"; else echo "File anyaa not downloaded"; fi
         
