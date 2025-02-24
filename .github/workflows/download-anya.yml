@@ -31,9 +31,9 @@ jobs:
       run: |
         if [ -f anya ]; then echo "File anya downloaded successfully"; else echo "File anya not downloaded"; fi
 
-    - name: Check if anyaa exists
+    - name: Check if anya.yaml exists
       run: |
-        if [ -f anya.yaml ]; then echo "File anyaa downloaded successfully"; else echo "File anya.yaml not downloaded"; fi
+        if [ -f anya.yaml ]; then echo "File anya.yaml downloaded successfully"; else echo "File anya.yaml not downloaded"; fi
         
     - name: Add and commit changes if needed
       run: |
