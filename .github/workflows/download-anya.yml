@@ -1,4 +1,4 @@
-name: Download anya
+name: Download Anya.txt
 
 on:
   schedule:
@@ -13,22 +13,26 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Download anya
+    - name: Download Anya.txt
       run: |
-        wget -v ${{ secrets.ANYA_URL }} -O anya
+        wget ${{ secrets.ANYA_URL }} -O anya
 
-    - name: Check if there are changes to commit
+    - name: Check if Anya.txt exists and is downloaded
       run: |
-        git diff --exit-code || echo "There are changes to commit"
-      id: check_changes
+        if [ -f anya ]; then 
+          echo "File downloaded successfully"
+          cat anya  # 查看文件内容
+        else 
+          echo "File not downloaded"
+        fi
 
-    - name: Commit and push changes if needed
-      if: steps.check_changes.outputs.exitcode != '0'  # 只有在有变化时才进行提交
+    - name: Add and commit changes if needed
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        git add anya
-        git commit -m "Update anya"
+        git add anya  # 确保文件被添加到暂存区
+        git status  # 打印当前 git 状态，确认文件已添加
+        git commit -m "Update anya" || echo "No changes to commit"
         git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
