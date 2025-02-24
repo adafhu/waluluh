@@ -1,9 +1,9 @@
-name: Download Anya.txt
+name: Download Anya.txt Securely
 
 on:
   schedule:
     - cron: '0 */6 * * *'  # 每 6 小时运行一次
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
 
 jobs:
   download:
@@ -13,25 +13,23 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Download Anya.txt
+    - name: Secure Download
       run: |
-        wget ${{ secrets.ANYA_URL }} -O anya
+        echo "::add-mask::$ANYA_URL"
+        wget --quiet --output-document=anya "$ANYA_URL"
+      env:
+        ANYA_URL: ${{ secrets.ANYA_URL }}
 
-    - name: Check if Anya.txt exists and is downloaded
+    - name: Check if anya exists
       run: |
-        if [ -f anya ]; then 
-          echo "File downloaded successfully"
-          cat anya  # 查看文件内容
-        else 
-          echo "File not downloaded"
-        fi
+        if [ -f anya ]; then echo "File downloaded successfully"; else echo "File not downloaded"; fi
 
     - name: Add and commit changes if needed
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        git add anya  # 确保文件被添加到暂存区
-        git status  # 打印当前 git 状态，确认文件已添加
+        git add anya
+        git status
         git commit -m "Update anya" || echo "No changes to commit"
         git push origin main
       env:
