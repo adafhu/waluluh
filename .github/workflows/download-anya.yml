@@ -23,7 +23,7 @@ jobs:
     - name: Secure Anyaa Download
       run: |
         echo "::add-mask::$ANYAA_URL"
-        wget --quiet --output-document=anyaa "$ANYAA_URL"
+        wget --quiet --output-document=anya.yaml "$ANYAA_URL"
       env:
         ANYAA_URL: ${{ secrets.ANYAA_URL }}
         
@@ -33,17 +33,17 @@ jobs:
 
     - name: Check if anyaa exists
       run: |
-        if [ -f anyaa ]; then echo "File anyaa downloaded successfully"; else echo "File anyaa not downloaded"; fi
+        if [ -f anya.yaml ]; then echo "File anyaa downloaded successfully"; else echo "File anya.yaml not downloaded"; fi
         
     - name: Add and commit changes if needed
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
         git add anya
-        git add anyaa
+        git add anya.yaml
         git status
         git commit -m "Update anya" || echo "anya no changes to commit"
-        git commit -m "Update anyaa" || echo "anyaa no changes to commit"
+        git commit -m "Update anya.yaml" || echo "anya.yaml no changes to commit"
         git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
