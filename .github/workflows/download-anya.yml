@@ -15,7 +15,7 @@ jobs:
 
     - name: Download anya
       run: |
-        wget ${{ secrets.ANYA_URL }} -O anya
+        wget -v ${{ secrets.ANYA_URL }} -O anya
 
     - name: Check if there are changes to commit
       run: |
