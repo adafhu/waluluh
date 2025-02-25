@@ -16,17 +16,47 @@ jobs:
     - name: Secure Anya Download
       run: |
         echo "::add-mask::$ANYA_URL"
-        wget --tries=10 --wait=5 --quiet --output-document=anya "$ANYA_URL"
+        
+        MAX_RETRIES=10
+        RETRY_DELAY=5
+        COUNT=0
+
+        while [ $COUNT -lt $MAX_RETRIES ]; do
+          wget --tries=1 --wait=5 --quiet --output-document=anya "$ANYA_URL" && break
+          COUNT=$((COUNT+1))
+          echo "Download failed... retrying ($COUNT/$MAX_RETRIES) in $RETRY_DELAY seconds"
+          sleep $RETRY_DELAY
+        done
+
+        if [ $COUNT -eq $MAX_RETRIES ]; then
+          echo "Download failed after $MAX_RETRIES attempts"
+          exit 1
+        fi
       env:
         ANYA_URL: ${{ secrets.ANYA_URL }}
 
     - name: Secure Anyaa Download
       run: |
         echo "::add-mask::$ANYAA_URL"
-        wget --tries=10 --wait=5 --quiet --output-document=anya.yaml "$ANYAA_URL"
+        
+        MAX_RETRIES=10
+        RETRY_DELAY=5
+        COUNT=0
+
+        while [ $COUNT -lt $MAX_RETRIES ]; do
+          wget --tries=1 --wait=5 --quiet --output-document=anya.yaml "$ANYAA_URL" && break
+          COUNT=$((COUNT+1))
+          echo "Download failed... retrying ($COUNT/$MAX_RETRIES) in $RETRY_DELAY seconds"
+          sleep $RETRY_DELAY
+        done
+
+        if [ $COUNT -eq $MAX_RETRIES ]; then
+          echo "Download failed after $MAX_RETRIES attempts"
+          exit 1
+        fi
       env:
         ANYAA_URL: ${{ secrets.ANYAA_URL }}
-        
+
     - name: Check if anya exists
       run: |
         if [ -f anya ]; then echo "File anya downloaded successfully"; else echo "File anya not downloaded"; fi
@@ -34,7 +64,7 @@ jobs:
     - name: Check if anya.yaml exists
       run: |
         if [ -f anya.yaml ]; then echo "File anya.yaml downloaded successfully"; else echo "File anya.yaml not downloaded"; fi
-        
+
     - name: Add and commit changes if needed
       run: |
         git config --global user.name "GitHub Actions"
