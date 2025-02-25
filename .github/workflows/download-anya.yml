@@ -16,14 +16,14 @@ jobs:
     - name: Secure Anya Download
       run: |
         echo "::add-mask::$ANYA_URL"
-        wget --quiet --output-document=anya "$ANYA_URL"
+        wget --tries=10 --wait=5 --quiet --output-document=anya "$ANYA_URL"
       env:
         ANYA_URL: ${{ secrets.ANYA_URL }}
 
     - name: Secure Anyaa Download
       run: |
         echo "::add-mask::$ANYAA_URL"
-        wget --quiet --output-document=anya.yaml "$ANYAA_URL"
+        wget --tries=10 --wait=5 --quiet --output-document=anya.yaml "$ANYAA_URL"
       env:
         ANYAA_URL: ${{ secrets.ANYAA_URL }}
         
