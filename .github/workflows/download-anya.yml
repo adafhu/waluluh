@@ -2,7 +2,7 @@ name: Download Anya.txt Securely
 
 on:
   schedule:
-    - cron: '0 8,20 * * *'  # 每天8点、20点运行
+    - cron: '*/10 8,20 * * *'  # 每天8点、20点运行
   workflow_dispatch:
 
 jobs:
