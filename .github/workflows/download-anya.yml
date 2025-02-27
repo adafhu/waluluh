@@ -1,4 +1,4 @@
-name: Download Anya Securely
+name: Download slayer Securely
 
 on:
   schedule:
@@ -13,16 +13,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Secure Anya Download
+    - name: Secure slayer Download
       run: |
-        echo "::add-mask::$ANYA_URL"
+        echo "::add-mask::$SLAYER_URL"
         
         MAX_RETRIES=10
         RETRY_DELAY=5
         COUNT=0
 
         while [ $COUNT -lt $MAX_RETRIES ]; do
-          wget --tries=1 --wait=5 --quiet --output-document=anya "$ANYA_URL" && break
+          wget --tries=1 --wait=5 --quiet --output-document=slayer "$SLAYER_URL" && break
           COUNT=$((COUNT+1))
           echo "Download failed... retrying ($COUNT/$MAX_RETRIES) in $RETRY_DELAY seconds"
           sleep $RETRY_DELAY
@@ -33,19 +33,19 @@ jobs:
           exit 1
         fi
       env:
-        ANYA_URL: ${{ secrets.ANYA_URL }}
+        SLAYER_URL: ${{ secrets.SLAYER_URL }}
 
-    - name: Check if anya exists
+    - name: Check if slayer exists
       run: |
-        if [ -f anya ]; then echo "File anya downloaded successfully"; else echo "File anya not downloaded"; fi
+        if [ -f slayer ]; then echo "File slayer downloaded successfully"; else echo "File slayer not downloaded"; fi
 
     - name: Add and commit changes if needed
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        git add anya
+        git add slayer 
         git status
-        git commit -m "Update anya" || echo "anya no changes to commit"
+        git commit -m "Update slayer" || echo "slayer no changes to commit"
         git push origin main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
